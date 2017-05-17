@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.ArrayList;
 import java.io.File;
 import javax.imageio.ImageIO;
-import java.io.IOException;
 import javax.swing.JPanel;
 import javax.swing.JFrame;
 import java.awt.Graphics;
@@ -22,17 +21,46 @@ import java.net.URL;
 
 public class Averager {
 
-    public static void displayImage(String location, String path) {
-        if (location.equals("local")) {
-            BufferedImage input = getImage(path);
-            BufferedImage original = resize(input);
-            BufferedImage averaged = averageImage(original);
-            displayFrame(original, averaged);
-        } else if (location.equals("url")) {
+    public static void displayAveragedLocalImage(String path) {
+        BufferedImage input = getLocalImage(path);
+        displayImage(input);
+    }
 
-        } else {
-            System.out.println("Error: Location not specified or doesn't exist.");
+    public static void displayAveragedURLImage(String path) {
+        BufferedImage input = getURLImage(path);
+        displayImage(input);
+    }
+
+    public static BufferedImage getAveragedLocalImage(String path) {
+        return averageImage(getLocalImage(path));
+    }
+
+    public static BufferedImage getAveragedURLImage(String path) {
+        return averageImage(getURLImage(path));
+    }
+
+    private static BufferedImage getLocalImage(String path) {
+        try {
+            return ImageIO.read(new File(path));
+        } catch (java.io.IOException e) {
+            System.out.println("Error: " + e);
         }
+        return null;
+    }
+
+    private static BufferedImage getURLImage(String path) {
+        try {
+            return ImageIO.read(new URL(path));
+        } catch (java.io.IOException e) {
+            System.out.println("Error: " + e);
+        }
+        return null;
+    }
+
+    private static void displayImage(BufferedImage b) {
+        BufferedImage original = resize(b);
+        BufferedImage averaged = averageImage(original);
+        displayFrame(original, averaged);
     }
 
     private static void displayFrame(BufferedImage a, BufferedImage b) {
@@ -74,18 +102,7 @@ public class Averager {
         return output;
     }
 
-    private static BufferedImage getImage(String path) {
-        File input = new File(path);
-        try {
-            BufferedImage image = ImageIO.read(input);
-            return image;
-        } catch (IOException e) {
-            System.out.println("Error: " + e);
-        }
-        return null;
-    }
-
-    private static BufferedImage averageImage(BufferedImage b) {
+    public static BufferedImage averageImage(BufferedImage b) {
         int width = b.getWidth();
         int height = b.getHeight();
         int[][][] rgb = new int[width][height][3];
