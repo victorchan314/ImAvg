@@ -6,17 +6,14 @@ package ImageAverager; /**
  * in the image.
  */
 
+import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.awt.Color;
 import java.util.List;
 import java.util.ArrayList;
 import java.io.File;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 import javax.swing.JFrame;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Dimension;
 import java.net.URL;
 
 public class Averager {
@@ -45,16 +42,17 @@ public class Averager {
         } catch (java.io.IOException e) {
             System.out.println("Error: " + e);
         }
-        return null;
+        throw new java.lang.RuntimeException("Error: Image not found");
     }
 
     private static BufferedImage getURLImage(String path) {
         try {
+//            return convertToBufferedImage(Toolkit.getDefaultToolkit().createImage(new URL(path)));
             return ImageIO.read(new URL(path));
         } catch (java.io.IOException e) {
             System.out.println("Error: " + e);
         }
-        return null;
+        throw new java.lang.RuntimeException("Error: Image not downloaded");
     }
 
     private static void displayImage(BufferedImage b) {
@@ -159,6 +157,14 @@ public class Averager {
         }
         return total / l.size();
     }
+
+//    private static BufferedImage convertToBufferedImage(Image i) {
+//        BufferedImage output = new BufferedImage(i.getWidth(null), i.getHeight(null), BufferedImage.TYPE_INT_RGB);
+//        Graphics2D o = output.createGraphics();
+//        o.drawImage(i, 0, 0, null);
+//        o.dispose();
+//        return output;
+//    }
 
     private static class TwoImageDisplay extends JPanel {
 
