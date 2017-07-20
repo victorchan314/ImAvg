@@ -15,7 +15,7 @@ While both of the above revelations emerged as false, they were enough to compel
 
 In order to average a local image, simply run the averager in your command line with the image as the argument.
 
-    java ImageAverager Halloween\ Ghost.jpg
+    java ImageAverager ../Halloween\ Ghost.jpg
 
 ## Remote Images
 
